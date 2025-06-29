@@ -1,0 +1,102 @@
+services:
+    node1:
+        container_name: redis-node-1
+        image: redis
+        volumes:
+          - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+        ports: 
+            - 7001:7001
+            - 17001:17001
+        entrypoint: [redis-server, /usr/local/etc/redis/redis.conf, --port,"7001", --cluster-announce-ip,"${LOCAL_IP}", --cluster-announce-port,"7001", --cluster-announce-bus-port,"17001"]
+        networks:
+          container_network:
+            ipv4_address: 172.16.0.101
+
+    node2:
+        container_name: redis-node-2
+        image: redis
+        volumes:
+          - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+        ports: 
+            - 7002:7002
+            - 17002:17002
+        entrypoint: [redis-server, /usr/local/etc/redis/redis.conf, --port,"7002", --cluster-announce-ip,"${LOCAL_IP}", --cluster-announce-port,"7002", --cluster-announce-bus-port,"17002"]
+        networks:
+          container_network:
+            ipv4_address: 172.16.0.102
+
+    node3:
+        container_name: redis-node-3
+        image: redis
+        volumes:
+          - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+        ports: 
+            - 7003:7003
+            - 17003:17003
+        entrypoint: [redis-server, /usr/local/etc/redis/redis.conf, --port,"7003", --cluster-announce-ip,"${LOCAL_IP}", --cluster-announce-port,"7003", --cluster-announce-bus-port,"17003"]
+        networks:
+          container_network:
+            ipv4_address: 172.16.0.103
+
+    node4:
+        container_name: redis-node-4
+        image: redis
+        volumes:
+          - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+        ports: 
+            - 7004:7004
+            - 17004:17004
+        entrypoint: [redis-server, /usr/local/etc/redis/redis.conf, --port,"7004", --cluster-announce-ip,"${LOCAL_IP}", --cluster-announce-port,"7004", --cluster-announce-bus-port,"17004"]
+        networks:
+          container_network:
+            ipv4_address: 172.16.0.104
+
+    node5:
+        container_name: redis-node-5
+        image: redis
+        volumes:
+          - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+        ports: 
+            - 7005:7005
+            - 17005:17005
+        entrypoint: [redis-server, /usr/local/etc/redis/redis.conf, --port,"7005", --cluster-announce-ip,"${LOCAL_IP}", --cluster-announce-port,"7005", --cluster-announce-bus-port,"17005"]
+        networks:
+          container_network:
+            ipv4_address: 172.16.0.105
+
+    node6:
+        container_name: redis-node-6
+        image: redis
+        volumes:
+          - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+        ports: 
+            - 7006:7006
+            - 17006:17006
+        entrypoint: [redis-server, /usr/local/etc/redis/redis.conf, --port,"7006", --cluster-announce-ip,"${LOCAL_IP}", --cluster-announce-port,"7006", --cluster-announce-bus-port,"17006"]
+        networks:
+          container_network:
+            ipv4_address: 172.16.0.106
+
+    cluster-creator:
+        image: redis
+        volumes:
+          - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+        entrypoint: [/bin/sh,-c,'echo "yes" | redis-cli --cluster create 172.16.0.101:7001 172.16.0.102:7002 172.16.0.103:7003 172.16.0.104:7004 172.16.0.105:7005 172.16.0.106:7006 --cluster-replicas 1']
+        depends_on: 
+          - node1
+          - node2
+          - node3
+          - node4
+          - node5
+          - node6
+        networks:
+          container_network:
+            ipv4_address: 172.16.0.200
+
+networks:
+  container_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.0.0/16
+          gateway: 172.16.0.1
