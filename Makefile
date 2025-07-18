@@ -17,3 +17,7 @@ kafka-cluster:
 rabbitmq-standalone:
 	docker compose -f rabbitmq-standalone/docker-compose.yml up -d
 .PHONY: rabbitmq-standalone
+
+mongodb-standalone:
+	docker compose -f mongodb-standalone/docker-compose.yml up -d
+.PHONY: mongodb-standalone
