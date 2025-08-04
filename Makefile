@@ -10,6 +10,10 @@ redis-cluster:
 	LOCAL_IP=$$(ipconfig getifaddr en0) docker compose -f redis-cluster/docker-compose.yml up -d
 .PHONY: redis-cluster
 
+kill-redis-cluster:
+	docker compose -f redis-cluster/docker-compose.yml down --remove-orphans
+.PHONY: redis-cluster
+
 redis-standalone:
 	docker compose -f redis-standalone/docker-compose.yml up -d
 .PHONY: redis-standalone
