@@ -29,3 +29,7 @@ rabbitmq-standalone:
 mongodb-standalone:
 	docker compose -f mongodb-standalone/docker-compose.yml up -d
 .PHONY: mongodb-standalone
+
+nats-cluster:
+	docker compose -f nats-cluster/docker-compose.yml up -d
+.PHONY: nats-cluster
